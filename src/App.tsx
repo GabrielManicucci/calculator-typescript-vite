@@ -12,37 +12,69 @@ function App() {
   const clearValue = () => {
     setPrimaryNumber(undefined);
     setSecondaryNumber(undefined);
-    setMathematicalOperation("");
+    setMathematicalOperation(undefined);
     setResult(undefined);
   };
 
   const setDigit = (digit: number) => {
-    if (primaryNumber) {
-      setSecondaryNumber(digit);
+    if (primaryNumber && mathematicalOperation) {
+      const value = `${secondaryNumber ? secondaryNumber : ""}${
+        digit ? digit : ""
+      }`;
+      setSecondaryNumber(Number(value));
     } else {
-      setPrimaryNumber(digit);
+      const value = `${primaryNumber ? primaryNumber : ""}${
+        digit ? digit : ""
+      }`;
+
+      setPrimaryNumber(Number(value));
     }
   };
 
   const handleMathematicalOperation = (operation: string) => {
     if (operation === "=" && primaryNumber && secondaryNumber) {
-      const value = primaryNumber + secondaryNumber;
-      setResult(value);
-    } else if (mathematicalOperation && primaryNumber && secondaryNumber) {
       let value = 0;
 
-      if (operation === "+") {
+      if (mathematicalOperation === "+") {
         value = primaryNumber + secondaryNumber;
       }
 
-      if (operation === "-") {
+      if (mathematicalOperation === "-") {
         value = primaryNumber - secondaryNumber;
       }
 
-      setResult(value);
-      console.log(value);
+      if (mathematicalOperation === "*") {
+        value = primaryNumber * secondaryNumber;
+      }
 
-      setPrimaryNumber(value);
+      if (mathematicalOperation === "/") {
+        value = primaryNumber / secondaryNumber;
+      }
+
+      setResult(Number(value.toFixed(3)));
+    } else if (mathematicalOperation && primaryNumber && secondaryNumber) {
+      let value = 0;
+
+      if (mathematicalOperation === "+") {
+        value = primaryNumber + secondaryNumber;
+      }
+
+      if (mathematicalOperation === "-") {
+        value = primaryNumber - secondaryNumber;
+      }
+
+      if (mathematicalOperation === "*") {
+        console.log("teste");
+        value = primaryNumber * secondaryNumber;
+      }
+
+      if (mathematicalOperation === "/") {
+        value = primaryNumber / secondaryNumber;
+      }
+
+      setResult(Number(value.toFixed(3)));
+
+      setPrimaryNumber(Number(value.toFixed(3)));
       setMathematicalOperation(operation);
       if (secondaryNumber) {
         setSecondaryNumber(undefined);
@@ -55,17 +87,13 @@ function App() {
   return (
     <div className="h-screen w-screen bg-neutral-500">
       <div className="bg-zinc-950 rounded-lg mx-auto my-0 top-32 relative max-w-[27rem]">
-        <div className="flex h-28 border-b border-zinc-500 w-full px-12 my-0 bg-transparent">
-          <input
-            className="text-white text-5xl w-[70%] bg-transparent"
-            type="text"
-            name=""
-            id=""
-            readOnly
-            value={`${primaryNumber ? primaryNumber : ""}${
-              mathematicalOperation ? mathematicalOperation : ""
-            }${secondaryNumber ? secondaryNumber : ""}`}
-          />
+        <div className="flex h-28 border-b border-zinc-500 w-full px-12 my-0 bg-transparent text-white text-5xl justify-between">
+          <div className="flex items-center gap-1">
+            <div>{primaryNumber}</div>
+            <div>{mathematicalOperation}</div>
+            <div>{secondaryNumber}</div>
+          </div>
+
           <div className="text-blue-300 flex items-center justify-end text-5xl w-[30%]">
             {resulted}
           </div>
